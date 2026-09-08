@@ -416,7 +416,12 @@
     gap:10px;
     margin-bottom:10px;
   }
+  .date-filter-actions{
+    display:flex;
+    gap:8px;
+  }
   .reset-date-btn{
+    flex:1;
     width:100%;
     border:none;
     background:var(--primary-soft);
@@ -427,6 +432,28 @@
     border-radius:9px;
     cursor:pointer;
   }
+  .reload-rekap-btn{
+    flex:1;
+    width:100%;
+    border:none;
+    background:var(--primary);
+    color:#fff;
+    font-size:12.5px;
+    font-weight:600;
+    padding:9px 0;
+    border-radius:9px;
+    cursor:pointer;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:6px;
+  }
+  .reload-rekap-btn:hover{ background:var(--primary-dark); }
+  .reload-rekap-btn.loading .reload-ico{
+    display:inline-block;
+    animation:spin 0.8s linear infinite;
+  }
+  @keyframes spin{ from{transform:rotate(0deg);} to{transform:rotate(360deg);} }
 
   .export-pdf-btn{
     background:var(--primary-dark);
@@ -786,7 +813,10 @@
             <input type="date" id="rekapDateTo" onchange="loadRekap()">
           </div>
         </div>
-        <button class="reset-date-btn" onclick="resetRekapDate()">Tampilkan Semua Tanggal</button>
+        <div class="date-filter-actions">
+          <button class="reset-date-btn" onclick="resetRekapDate()">Tampilkan Semua Tanggal</button>
+          <button class="reload-rekap-btn" id="reloadRekapBtn" onclick="loadRekap(true)"><span class="reload-ico">🔄</span> Muat Ulang</button>
+        </div>
       </div>
       <div class="summary-grid" id="summaryGrid"></div>
       <button class="btn export-pdf-btn" onclick="exportRekapPDF()">📄 Export ke PDF</button>
@@ -916,6 +946,7 @@
   let currentGroup = "A";
   let rekapFilter = "ALL";
   let lastRekapData = null;
+  let rekapRequestSeq = 0;
   let students = [];          // cache of all students
   let attendanceMap = {};     // student_id -> status for current date/group
 
@@ -1102,36 +1133,70 @@
   };
 
   // ---------- REKAP PAGE ----------
-  async function loadRekap(){
+  async function loadRekap(manual){
     const body = document.getElementById('rekapBody');
     const grid = document.getElementById('summaryGrid');
+    const reloadBtn = document.getElementById('reloadRekapBtn');
+
+    // Setiap pemanggilan loadRekap() mendapat nomor urut sendiri.
+    // Kalau ada pemanggilan lain yang lebih baru (mis. user cepat ganti
+    // tanggal dari/ke), hasil dari request yang lebih lama akan diabaikan
+    // supaya rekap yang tampil selalu sesuai filter tanggal TERBARU
+    // (bukan hasil basi/race condition) — ini akar penyebab bug lama.
+    const myReq = ++rekapRequestSeq;
+
     if(!supabase){
       body.innerHTML = '<tr><td colspan="7" class="empty-state">Supabase belum terhubung.</td></tr>';
       grid.innerHTML = '';
       return;
     }
+
+    if(reloadBtn) reloadBtn.classList.add('loading');
     grid.innerHTML = '<div class="loading-line" style="grid-column:1/-1;">Memuat...</div>';
     body.innerHTML = '';
 
+    // Ambil nilai filter tanggal PERSIS pada saat request ini dibuat,
+    // supaya data yang ditampilkan konsisten dengan tanggal yang sedang
+    // di-set saat ini (real-time terhadap input, bukan terhadap render lama).
+    const dateFrom = document.getElementById('rekapDateFrom').value;
+    const dateTo = document.getElementById('rekapDateTo').value;
+    const filterAtRequest = rekapFilter;
+
     let studQuery = supabase.from('students').select('*').order('name');
-    if(rekapFilter !== 'ALL') studQuery = studQuery.eq('group_name', rekapFilter);
+    if(filterAtRequest !== 'ALL') studQuery = studQuery.eq('group_name', filterAtRequest);
     const { data: studentData, error: sErr } = await studQuery;
-    if(sErr){ grid.innerHTML = ''; body.innerHTML = '<tr><td colspan="7" class="empty-state">'+sErr.message+'</td></tr>'; return; }
+
+    if(myReq !== rekapRequestSeq) return; // ada request lebih baru, buang hasil ini
+
+    if(sErr){
+      grid.innerHTML = '';
+      body.innerHTML = '<tr><td colspan="7" class="empty-state">'+sErr.message+'</td></tr>';
+      if(reloadBtn) reloadBtn.classList.remove('loading');
+      return;
+    }
 
     if(!studentData || studentData.length===0){
       grid.innerHTML = '';
       body.innerHTML = '<tr><td colspan="7" class="empty-state">Belum ada anggota.</td></tr>';
+      if(reloadBtn) reloadBtn.classList.remove('loading');
+      lastRekapData = { studentData: [], counts: {}, totals: { hadir:0, ijin:0, sakit:0, alpha:0, terlambat:0 }, group: filterAtRequest, dateFrom, dateTo };
       return;
     }
 
     const ids = studentData.map(s=>s.id);
     let attQuery = supabase.from('attendance').select('*').in('student_id', ids);
-    const dateFrom = document.getElementById('rekapDateFrom').value;
-    const dateTo = document.getElementById('rekapDateTo').value;
     if(dateFrom) attQuery = attQuery.gte('date', dateFrom);
     if(dateTo) attQuery = attQuery.lte('date', dateTo);
     const { data: attData, error: aErr } = await attQuery;
-    if(aErr){ grid.innerHTML = ''; body.innerHTML = '<tr><td colspan="7" class="empty-state">'+aErr.message+'</td></tr>'; return; }
+
+    if(myReq !== rekapRequestSeq) return; // ada request lebih baru, buang hasil ini
+
+    if(aErr){
+      grid.innerHTML = '';
+      body.innerHTML = '<tr><td colspan="7" class="empty-state">'+aErr.message+'</td></tr>';
+      if(reloadBtn) reloadBtn.classList.remove('loading');
+      return;
+    }
 
     // per-student counts
     const counts = {};
@@ -1163,7 +1228,10 @@
       </tr>`;
     }).join('');
 
-    lastRekapData = { studentData, counts, totals, group: rekapFilter, dateFrom, dateTo };
+    lastRekapData = { studentData, counts, totals, group: filterAtRequest, dateFrom, dateTo };
+
+    if(reloadBtn) reloadBtn.classList.remove('loading');
+    if(manual === true) showToast("Data rekap diperbarui.");
   }
 
   // ---------- EXPORT PDF ----------
