@@ -815,7 +815,7 @@
         </div>
         <div class="date-filter-actions">
           <button class="reset-date-btn" onclick="resetRekapDate()">Tampilkan Semua Tanggal</button>
-          <button class="reload-rekap-btn" id="reloadRekapBtn" onclick="loadRekap(true)"><span class="reload-ico">🔄</span> Muat Ulang</button>
+          <button class="reload-rekap-btn" id="reloadRekapBtn" onclick="showRekapToday()"><span class="reload-ico">📅</span> Tampilkan Tanggal Sekarang</button>
         </div>
       </div>
       <div class="summary-grid" id="summaryGrid"></div>
@@ -1061,6 +1061,13 @@
     document.getElementById('rekapDateFrom').value = '';
     document.getElementById('rekapDateTo').value = '';
     loadRekap();
+  };
+
+  window.showRekapToday = function(){
+    const today = new Date().toISOString().slice(0,10);
+    document.getElementById('rekapDateFrom').value = today;
+    document.getElementById('rekapDateTo').value = today;
+    loadRekap(true);
   };
 
   function showToast(msg){
