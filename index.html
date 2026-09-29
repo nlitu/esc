@@ -269,6 +269,36 @@
     background:var(--primary);
     color:#fff;
   }
+  .search-box{
+    position:relative;
+    margin:0 0 12px;
+  }
+  .search-box input{
+    width:100%;
+    padding:11px 38px 11px 38px;
+    border:1.5px solid var(--border);
+    border-radius:12px;
+    background:var(--surface);
+    color:var(--text);
+    font-size:14px;
+    font-family:inherit;
+    outline:none;
+  }
+  .search-box input:focus{ border-color:var(--primary); }
+  .search-box .s-ico{
+    position:absolute; left:12px; top:50%; transform:translateY(-50%);
+    font-size:14px; pointer-events:none; opacity:.7;
+  }
+  .search-box .s-clear{
+    position:absolute; right:8px; top:50%; transform:translateY(-50%);
+    width:26px; height:26px; border:none; border-radius:50%;
+    background:var(--primary-soft); color:var(--primary);
+    font-size:14px; line-height:1; cursor:pointer; display:none;
+  }
+  .search-box.has-text .s-clear{ display:block; }
+  .no-search-result{
+    text-align:center; color:var(--muted); font-size:13px; padding:22px 12px;
+  }
   .date-row{
     display:flex;
     align-items:center;
@@ -276,6 +306,23 @@
     margin-bottom:16px;
   }
   .date-row input[type=date]{ flex:1; }
+  .load-btn{
+    border:none;
+    background:var(--primary);
+    color:#fff;
+    font-size:13px;
+    font-weight:700;
+    padding:11px 20px;
+    border-radius:10px;
+    cursor:pointer;
+    white-space:nowrap;
+    font-family:inherit;
+    transition:box-shadow .15s, transform .05s;
+  }
+  .load-btn:active{ transform:scale(.97); }
+  .load-btn:hover{ background:var(--primary-dark); }
+  .load-btn.pending{ box-shadow:0 0 0 3px rgba(184,134,47,.45); }
+  .load-btn.full{ width:100%; margin-bottom:8px; padding:10px 0; }
 
   /* student card */
   .student-card{
@@ -733,6 +780,158 @@
   }
 
   ::placeholder{ color:#a9b6b6; }
+
+  /* ================= TEMA ELEGAN ================= */
+  :root{
+    --bg:#F7F5F0;
+    --surface:#FFFFFF;
+    --border:#E6E1D6;
+    --text:#1C2333;
+    --muted:#7A7F8E;
+    --primary:#1B2A54;
+    --primary-dark:#111C3B;
+    --primary-soft:#ECEAE3;
+    --gold:#B08D57;
+    --gold-soft:#F3ECDD;
+    --hadir:#3F7D5C;     --hadir-soft:#E8F1EB;
+    --ijin:#3B6EA8;      --ijin-soft:#E8EFF6;
+    --sakit:#7A5AAE;     --sakit-soft:#EFEAF5;
+    --alpha:#B5495B;     --alpha-soft:#F6E9EB;
+    --terlambat:#A9803A; --terlambat-soft:#F5EEDF;
+    --radius:12px;
+  }
+  body,#app{ background:var(--bg); }
+  .app-header h2,.section-title,.summary-cell .num,.login-card h1{
+    font-family:Georgia,'Times New Roman',serif; font-weight:700; letter-spacing:.3px;
+  }
+
+  /* header */
+  .app-header{
+    background:var(--primary);
+    border-bottom:3px solid var(--gold);
+    border-radius:0;
+    padding:18px 20px 16px;
+    box-shadow:0 2px 12px rgba(17,28,59,.18);
+  }
+  .app-header .sub{ color:#D8C9A6; letter-spacing:.6px; font-size:12px; text-transform:uppercase; }
+  .logout-btn{
+    background:transparent !important; color:#fff !important;
+    border:1px solid rgba(255,255,255,.4) !important; border-radius:8px !important;
+  }
+  .logout-btn:hover{ border-color:var(--gold) !important; color:#E7D3A8 !important; }
+
+  /* tab & filter */
+  .group-toggle button,.rekap-filter button,.member-group-filter button{
+    background:#fff; color:var(--primary); border:1px solid var(--border);
+    border-radius:8px; font-weight:600; box-shadow:none; transform:none;
+  }
+  .group-toggle button.active,.rekap-filter button.active,.member-group-filter button.active{
+    background:var(--primary); color:#fff; border-color:var(--primary);
+    box-shadow:0 2px 8px rgba(17,28,59,.2); transform:none;
+  }
+
+  /* input */
+  input[type=date],.search-box input,.sort-row select{
+    border:1px solid var(--border) !important; border-radius:10px !important;
+    background:#fff; box-shadow:none;
+  }
+  input[type=date]:focus,.search-box input:focus,.sort-row select:focus{
+    border-color:var(--gold) !important; box-shadow:0 0 0 3px rgba(176,141,87,.18);
+  }
+
+  /* tombol */
+  .btn,.load-btn,.reload-rekap-btn,.toggle-add-btn{
+    background:var(--primary) !important; color:#fff !important; border:none;
+    border-radius:10px; font-weight:600; letter-spacing:.3px;
+    box-shadow:0 2px 8px rgba(17,28,59,.2);
+  }
+  .btn:hover,.load-btn:hover,.reload-rekap-btn:hover,.toggle-add-btn:hover{ background:var(--primary-dark) !important; }
+  .btn.secondary,.reset-date-btn{
+    background:#fff !important; color:var(--primary) !important;
+    border:1px solid var(--border) !important; box-shadow:none;
+  }
+  .load-btn.pending{ animation:none; box-shadow:0 0 0 3px rgba(176,141,87,.5); }
+  .export-pdf-btn{ background:var(--gold) !important; color:#fff !important; box-shadow:0 2px 8px rgba(176,141,87,.35); }
+  .delete-rekap-btn,.bulk-del-btn{
+    background:#fff !important; color:var(--alpha) !important;
+    border:1px solid #E7C6CC !important; box-shadow:none;
+  }
+
+  /* kartu */
+  .student-card,.member-list-item,.add-panel,.date-filter-box,.import-box{
+    background:#fff; border:1px solid var(--border); border-radius:var(--radius);
+    box-shadow:0 1px 3px rgba(28,35,51,.05);
+  }
+  .student-card{ border-left:3px solid var(--gold) !important; }
+  .student-card .name{ font-weight:700; color:var(--text); }
+  .student-card .grp-badge,.member-list-item .m-grp{
+    background:var(--gold-soft); color:#7C6033;
+    padding:2px 9px; border-radius:6px; font-weight:600; font-size:11.5px;
+  }
+
+  /* chip status: netral, berwarna lembut saat dipilih */
+  .status-chip{
+    background:#fff; color:var(--muted); border:1px solid var(--border);
+    border-radius:8px; font-weight:600; transform:none; box-shadow:none;
+  }
+  .status-chip[data-status=hadir]{ background:#fff; border-color:var(--border); color:var(--muted); }
+  .status-chip[data-status=ijin]{ background:#fff; border-color:var(--border); color:var(--muted); }
+  .status-chip[data-status=sakit]{ background:#fff; border-color:var(--border); color:var(--muted); }
+  .status-chip[data-status=alpha]{ background:#fff; border-color:var(--border); color:var(--muted); }
+  .status-chip[data-status=terlambat]{ background:#fff; border-color:var(--border); color:var(--muted); }
+  .status-chip[data-status=hadir].on{ background:var(--hadir); border-color:var(--hadir); color:#fff; }
+  .status-chip[data-status=ijin].on{ background:var(--ijin); border-color:var(--ijin); color:#fff; }
+  .status-chip[data-status=sakit].on{ background:var(--sakit); border-color:var(--sakit); color:#fff; }
+  .status-chip[data-status=alpha].on{ background:var(--alpha); border-color:var(--alpha); color:#fff; }
+  .status-chip[data-status=terlambat].on{ background:var(--terlambat); border-color:var(--terlambat); color:#fff; }
+  .status-chip.on{ transform:none; box-shadow:0 2px 6px rgba(28,35,51,.2); font-weight:700; }
+
+  /* ringkasan */
+  .summary-cell{
+    background:#fff !important; border:1px solid var(--border); border-top-width:3px;
+    border-radius:10px; box-shadow:0 1px 3px rgba(28,35,51,.05); color:var(--text);
+  }
+  .summary-cell .lbl{ color:var(--muted); text-transform:uppercase; letter-spacing:.6px; }
+  .summary-cell.hadir{ border-top-color:var(--hadir); } .summary-cell.hadir .num{ color:var(--hadir); }
+  .summary-cell.ijin{ border-top-color:var(--ijin); } .summary-cell.ijin .num{ color:var(--ijin); }
+  .summary-cell.sakit{ border-top-color:var(--sakit); } .summary-cell.sakit .num{ color:var(--sakit); }
+  .summary-cell.alpha{ border-top-color:var(--alpha); } .summary-cell.alpha .num{ color:var(--alpha); }
+  .summary-cell.terlambat{ border-top-color:var(--terlambat); } .summary-cell.terlambat .num{ color:var(--terlambat); }
+
+  /* tabel */
+  .rekap-table{ background:#fff; border-radius:12px; overflow:hidden; border:1px solid var(--border); box-shadow:none; border-collapse:collapse; }
+  .rekap-table thead th{ background:var(--primary); color:#fff; border:none; font-weight:600; letter-spacing:.4px; }
+  .rekap-table tbody tr{ border-bottom:1px solid var(--border); }
+  .rekap-table tbody tr:nth-child(even){ background:#FBFAF7; }
+  .rekap-table .name-cell{ font-weight:600; color:var(--text); }
+  .cell-hadir,.cell-ijin,.cell-sakit,.cell-alpha,.cell-terlambat{ background:transparent !important; font-weight:700; }
+  .cell-hadir{ color:var(--hadir); } .cell-ijin{ color:var(--ijin); } .cell-sakit{ color:var(--sakit); }
+  .cell-alpha{ color:var(--alpha); } .cell-terlambat{ color:var(--terlambat); }
+
+  .section-title{ color:var(--primary); }
+  .edit-btn{ background:#fff !important; color:var(--primary) !important; border:1px solid var(--border) !important; border-radius:8px; font-weight:600; }
+  .del-btn{ background:#fff !important; color:var(--alpha) !important; border:1px solid #E7C6CC !important; border-radius:8px; font-weight:600; }
+
+  /* navigasi bawah */
+  .bottom-nav{
+    background:#fff; backdrop-filter:none; border:none; border-top:1px solid var(--border);
+    border-radius:0; box-shadow:0 -2px 12px rgba(28,35,51,.06); padding-top:8px;
+  }
+  .nav-btn{ color:var(--muted); font-weight:600; border-radius:10px; background:transparent; box-shadow:none; transform:none; }
+  .nav-btn.active{ background:transparent; color:var(--primary); box-shadow:none; transform:none; position:relative; }
+  .nav-btn.active::after{
+    content:''; position:absolute; top:-9px; left:28%; right:28%; height:3px;
+    background:var(--gold); border-radius:0 0 3px 3px;
+  }
+  .nav-btn .ico{ font-size:18px; }
+
+  .hdr-left{ display:flex; align-items:center; gap:12px; min-width:0; }
+  .hdr-logo{
+    width:44px; height:44px; border-radius:50%; object-fit:cover; flex-shrink:0;
+    background:#fff; border:2px solid var(--gold);
+    box-shadow:0 2px 8px rgba(0,0,0,.25);
+  }
+  .toast{ background:var(--primary) !important; color:#fff !important; border-radius:10px !important; border-left:3px solid var(--gold); box-shadow:0 6px 18px rgba(17,28,59,.3); }
 </style>
 </head>
 <body>
@@ -774,9 +973,12 @@
   <div id="appShell" style="display:none; flex-direction:column; min-height:100vh;">
 
     <div class="app-header">
-      <div>
-        <h2 id="headerTitle">Absensi</h2>
-        <div class="sub" id="headerSub">Kelompok A &amp; B</div>
+      <div class="hdr-left">
+        <img id="headerLogo" class="hdr-logo" alt="Logo" style="display:none;">
+        <div>
+          <h2 id="headerTitle">Absensi</h2>
+          <div class="sub" id="headerSub">Kelompok A &amp; B</div>
+        </div>
       </div>
       <button class="logout-btn" onclick="handleLogout()">Keluar</button>
     </div>
@@ -788,7 +990,13 @@
         <button id="grpB" onclick="setGroup('B')">Kelompok B</button>
       </div>
       <div class="date-row">
-        <input type="date" id="attDate" onchange="loadAttendance()">
+        <input type="date" id="attDate" oninput="markPending('absensi')">
+        <button type="button" class="load-btn" id="loadAbsensiBtn" onclick="muatAbsensi()">Muat</button>
+      </div>
+      <div class="search-box" id="sb-absensi">
+        <span class="s-ico">🔍</span>
+        <input type="search" id="search-absensi" placeholder="Cari nama anak..." autocomplete="off" oninput="applySearch('absensi')">
+        <button type="button" class="s-clear" onclick="clearSearch('absensi')" aria-label="Hapus pencarian">✕</button>
       </div>
       <div id="studentListArea">
         <div class="loading-line">Memuat data...</div>
@@ -806,17 +1014,23 @@
         <div class="date-filter-row">
           <div class="field" style="flex:1; margin-bottom:0;">
             <label for="rekapDateFrom">Dari Tanggal</label>
-            <input type="date" id="rekapDateFrom" onchange="loadRekap()">
+            <input type="date" id="rekapDateFrom" oninput="markPending('rekap')">
           </div>
           <div class="field" style="flex:1; margin-bottom:0;">
             <label for="rekapDateTo">Sampai Tanggal</label>
-            <input type="date" id="rekapDateTo" onchange="loadRekap()">
+            <input type="date" id="rekapDateTo" oninput="markPending('rekap')">
           </div>
         </div>
+        <button type="button" class="load-btn full" id="loadRekapBtn" onclick="muatRekap()">Muat</button>
         <div class="date-filter-actions">
           <button class="reset-date-btn" onclick="resetRekapDate()">Tampilkan Semua Tanggal</button>
           <button class="reload-rekap-btn" id="reloadRekapBtn" onclick="showRekapToday()"><span class="reload-ico">📅</span> Tampilkan Tanggal Sekarang</button>
         </div>
+      </div>
+      <div class="search-box" id="sb-rekap">
+        <span class="s-ico">🔍</span>
+        <input type="search" id="search-rekap" placeholder="Cari nama anak..." autocomplete="off" oninput="applySearch('rekap')">
+        <button type="button" class="s-clear" onclick="clearSearch('rekap')" aria-label="Hapus pencarian">✕</button>
       </div>
       <div class="summary-grid" id="summaryGrid"></div>
       <button class="btn export-pdf-btn" onclick="exportRekapPDF()">📄 Export ke PDF</button>
@@ -893,6 +1107,11 @@
           Pilih Semua
         </label>
         <button class="bulk-del-btn" id="bulkDelBtn" style="display:none;" onclick="bulkDeleteSelected()">Hapus Terpilih (<span id="bulkCount">0</span>)</button>
+      </div>
+      <div class="search-box" id="sb-anggota">
+        <span class="s-ico">🔍</span>
+        <input type="search" id="search-anggota" placeholder="Cari nama anak..." autocomplete="off" oninput="applySearch('anggota')">
+        <button type="button" class="s-clear" onclick="clearSearch('anggota')" aria-label="Hapus pencarian">✕</button>
       </div>
       <div id="memberListArea">
         <div class="loading-line">Memuat data...</div>
@@ -1057,9 +1276,27 @@
     loadRekap();
   };
 
+  window.markPending = function(which){
+    const btn = document.getElementById(which==='absensi' ? 'loadAbsensiBtn' : 'loadRekapBtn');
+    if(btn) btn.classList.add('pending');
+  };
+  window.muatAbsensi = function(){
+    if(!document.getElementById('attDate').value){ showToast("Pilih tanggal dulu."); return; }
+    document.getElementById('loadAbsensiBtn').classList.remove('pending');
+    loadAttendance();
+  };
+  window.muatRekap = function(){
+    const from = document.getElementById('rekapDateFrom').value;
+    const to = document.getElementById('rekapDateTo').value;
+    if(from && to && from > to){ showToast("Tanggal 'Dari' tidak boleh setelah 'Sampai'."); return; }
+    document.getElementById('loadRekapBtn').classList.remove('pending');
+    loadRekap(true);
+  };
+
   window.resetRekapDate = function(){
     document.getElementById('rekapDateFrom').value = '';
     document.getElementById('rekapDateTo').value = '';
+    document.getElementById('loadRekapBtn').classList.remove('pending');
     loadRekap();
   };
 
@@ -1067,7 +1304,61 @@
     const today = new Date().toISOString().slice(0,10);
     document.getElementById('rekapDateFrom').value = today;
     document.getElementById('rekapDateTo').value = today;
+    document.getElementById('loadRekapBtn').classList.remove('pending');
     loadRekap(true);
+  };
+
+  // ---------- PENCARIAN NAMA ----------
+  const SEARCH_CFG = {
+    absensi:{ area:'studentListArea', item:'.student-card',     name:'.name' },
+    rekap:  { area:'rekapBody',       item:'tr',                 name:'.name-cell' },
+    anggota:{ area:'memberListArea',  item:'.member-list-item',  name:'.m-name' }
+  };
+
+  window.applySearch = function(key){
+    const cfg = SEARCH_CFG[key];
+    const input = document.getElementById('search-'+key);
+    const box = document.getElementById('sb-'+key);
+    const area = document.getElementById(cfg.area);
+    if(!cfg || !input || !area) return;
+    const q = input.value.trim().toLowerCase();
+    box.classList.toggle('has-text', input.value.length > 0);
+
+    let shown = 0, total = 0;
+    area.querySelectorAll(cfg.item).forEach(el=>{
+      const nameEl = el.querySelector(cfg.name);
+      if(!nameEl){ return; } // baris tanpa nama (mis. form edit / pesan kosong) dibiarkan
+      total++;
+      const nm = (nameEl.dataset.name || nameEl.textContent).toLowerCase();
+      const match = !q || nm.includes(q);
+      el.style.display = match ? '' : 'none';
+      if(match) shown++;
+    });
+
+    // pesan "tidak ditemukan"
+    const noId = 'noresult-'+key;
+    let msg = document.getElementById(noId);
+    const needMsg = q && total > 0 && shown === 0;
+    if(needMsg){
+      if(!msg){
+        msg = key === 'rekap' ? document.createElement('tr') : document.createElement('div');
+        msg.id = noId;
+        if(key === 'rekap') msg.innerHTML = '<td colspan="7" class="no-search-result"></td>';
+        else msg.className = 'no-search-result';
+      }
+      const holder = key === 'rekap' ? msg.firstChild : msg;
+      holder.textContent = 'Tidak ada nama yang cocok dengan "' + input.value.trim() + '".';
+      if(msg.parentNode !== area) area.appendChild(msg);
+    } else if(msg){
+      msg.remove();
+    }
+  };
+
+  window.clearSearch = function(key){
+    const input = document.getElementById('search-'+key);
+    input.value = '';
+    applySearch(key);
+    input.focus();
   };
 
   function showToast(msg){
@@ -1110,7 +1401,7 @@
       const current = attendanceMap[s.id] || null;
       card.innerHTML = `
         <div class="name-row">
-          <span class="name">${escapeHtml(s.name)}</span>
+          <span class="name" data-name="${escapeHtml(s.name)}">${escapeHtml(s.name)}</span>
           <span class="grp-badge">${s.kelas ? escapeHtml(s.kelas)+' • ' : ''}Kel. ${s.group_name}</span>
         </div>
         <div class="status-row">
@@ -1119,6 +1410,7 @@
       `;
       area.appendChild(card);
     });
+    applySearch('absensi');
   }
 
   window.setAttendance = async function(studentId, date, status, el){
@@ -1229,13 +1521,14 @@
     body.innerHTML = studentData.map(s=>{
       const c = counts[s.id];
       return `<tr>
-        <td class="name-cell">${escapeHtml(s.name)} <span style="color:var(--muted);font-weight:400;">(${s.group_name})</span></td>
+        <td class="name-cell" data-name="${escapeHtml(s.name)}">${escapeHtml(s.name)} <span style="color:var(--muted);font-weight:400;">(${s.group_name})</span></td>
         <td>${s.kelas ? escapeHtml(s.kelas) : '-'}</td>
         <td class="cell-status cell-hadir">${c.hadir}</td><td class="cell-status cell-ijin">${c.ijin}</td><td class="cell-status cell-sakit">${c.sakit}</td><td class="cell-status cell-alpha">${c.alpha}</td><td class="cell-status cell-terlambat">${c.terlambat}</td>
       </tr>`;
     }).join('');
 
     lastRekapData = { studentData, counts, totals, group: filterAtRequest, dateFrom, dateTo };
+    applySearch('rekap');
 
     if(reloadBtn) reloadBtn.classList.remove('loading');
     if(manual === true) showToast("Data rekap diperbarui.");
@@ -1583,7 +1876,7 @@
         item.innerHTML = `
           <input type="checkbox" class="member-chk" data-id="${s.id}" ${selectedMemberIds.has(s.id)?'checked':''} onchange="toggleSelectOne('${s.id}', this.checked)">
           <div class="member-body">
-            <div class="m-name">${escapeHtml(s.name)}</div>
+            <div class="m-name" data-name="${escapeHtml(s.name)}">${escapeHtml(s.name)}</div>
             <div class="m-grp">${s.kelas ? escapeHtml(s.kelas)+' • ' : ''}Kelompok ${s.group_name}</div>
           </div>
           <div class="member-actions">
@@ -1597,6 +1890,7 @@
 
     updateBulkBar();
     document.getElementById('selectAllChk').checked = data.length>0 && data.every(s=>selectedMemberIds.has(s.id));
+    applySearch('anggota');
   }
 
   function renderEditForm(s){
@@ -1704,6 +1998,14 @@
   if(localStorage.getItem(SESSION_KEY) === '1'){
     enterApp();
   }
+</script>
+<script>
+  // Logo header dalam: memakai gambar logo yang sama dengan halaman login
+  (function(){
+    const src = document.querySelector('.login-mark img');
+    const dst = document.getElementById('headerLogo');
+    if(src && src.src && dst){ dst.src = src.src; dst.style.display = 'block'; }
+  })();
 </script>
 </body>
 </html>
